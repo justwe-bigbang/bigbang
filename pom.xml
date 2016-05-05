@@ -13,4 +13,5 @@
         <module>bigbang-deploy</module>
         <module>bigbang-core</module>
     </modules>
+
 </project>
