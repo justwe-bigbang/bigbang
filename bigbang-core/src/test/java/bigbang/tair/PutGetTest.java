@@ -23,38 +23,35 @@ public class PutGetTest extends TestBase {
     @Test
     public void simpleGet() {
         ns = 120;
-        for (int i = 0; i < 10; ++i) {
-            byte[] key = UUID.randomUUID().toString().getBytes();
-            byte[] val = UUID.randomUUID().toString().getBytes();
-            try {
-                System.out.println(key);
-                System.out.println(val);
-                Result<Void> r = tair.put(ns, key, val, opt);
-                assertEquals(ResultCode.OK, r.getCode());
 
-                Result<byte[]> g = tair.get(ns, key, opt);
-                System.out.println(new ByteArray(g.getResult()));
-                assertEquals(ResultCode.OK, g.getCode());
+        byte[] key = UUID.randomUUID().toString().getBytes();
+        byte[] val = UUID.randomUUID().toString().getBytes();
+        try {
+            System.out.println(val);
+            Result<Void> r = tair.put(ns, key, val, opt);
+            assertEquals(ResultCode.OK, r.getCode());
 
-                //assertEquals(new ByteArray(key), new ByteArray(g.getKey()));
-                //assertEquals(new ByteArray(val), new ByteArray(g.getResult()));
-                //assertEquals(1, g.getVersion());
-                // assertEquals(0, g.getFlag());
+            Result<byte[]> g = tair.get(ns, key, opt);
+            System.out.println(new ByteArray(g.getResult()));
+            assertEquals(ResultCode.OK, g.getCode());
 
-                //System.out.println("DONE = " + i);
-            } catch (TairRpcError e) {
-                //assertEquals(false, true);
-                e.printStackTrace();
-            } catch (TairFlowLimit e) {
-                //assertEquals(false, true);
-                e.printStackTrace();
-            } catch (TairTimeout e) {
-                //assertEquals(false, true);
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                //assertEquals(false, true);
-                e.printStackTrace();
-            }
+            assertEquals(new ByteArray(key), new ByteArray(g.getKey()));
+            assertEquals(new ByteArray(val), new ByteArray(g.getResult()));
+            assertEquals(1, g.getVersion());
+            assertEquals(0, g.getFlag());
+
+        } catch (TairRpcError e) {
+            //assertEquals(false, true);
+            e.printStackTrace();
+        } catch (TairFlowLimit e) {
+            //assertEquals(false, true);
+            e.printStackTrace();
+        } catch (TairTimeout e) {
+            //assertEquals(false, true);
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            //assertEquals(false, true);
+            e.printStackTrace();
         }
     }
 }
