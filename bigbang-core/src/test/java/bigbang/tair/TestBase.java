@@ -15,6 +15,7 @@ import java.util.UUID;
  */
 public class TestBase {
 
+
     protected String master = "173.26.122.19:5198"; // tair master cs address, for example, 10.232.4.14:5008;
     protected String slave = null; // tair slave cs address
     protected String group = "group_1"; // tair group name
