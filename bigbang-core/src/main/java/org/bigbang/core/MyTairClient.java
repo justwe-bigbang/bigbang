@@ -6,11 +6,10 @@ import com.taobao.tair3.client.error.TairFlowLimit;
 import com.taobao.tair3.client.error.TairRpcError;
 import com.taobao.tair3.client.error.TairTimeout;
 import com.taobao.tair3.client.impl.DefaultTairClient;
-import org.bigbang.core.app.App;
 import org.bigbang.core.utils.ByteUtil;
 import org.bigbang.core.utils.SerializationUtil;
-
-import java.io.Serializable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -21,26 +20,37 @@ import java.io.Serializable;
  */
 public class MyTairClient extends DefaultTairClient {
 
+    //命名空间
+    private final static short NaneSpace=0;
+    //默认参数
+    private final static TairOption Opt=new TairOption(3000); //3s 超时
+
+    private final static Logger Logger= LoggerFactory.getLogger(MyTairClient.class);
 
     /**
-     * Get result.
+     * Get t.
      *
-     *
-     * @param t
-     * @param ns  the ns
+     * @param <T> the type parameter
+     * @param t   the t
      * @param key the key
-     * @return the result
+     * @return the t
      * @throws TairRpcError         the tair rpc error
      * @throws TairFlowLimit        the tair flow limit
      * @throws TairTimeout          the tair timeout
      * @throws InterruptedException the interrupted exception
      */
-    public <T> T get(Class<T> t,short ns, String key) throws TairRpcError, TairFlowLimit, TairTimeout, InterruptedException {
+    public <T> T get(Class<T> t,String key) throws TairRpcError, TairFlowLimit, TairTimeout, InterruptedException {
 
-        Result<byte[]> result= this.get(ns, ByteUtil.getBytes(key),null);
+        Result<byte[]> result= this.get(NaneSpace, ByteUtil.getBytes(key),Opt);
 
-        return SerializationUtil.deserialize(result.getResult(),t);
+        if (result.isSuccess() && result.getCode().errno()==0) {
+          return  SerializationUtil.deserialize(result.getResult(),t);
+        }
+        // request fail;
+        Logger.error("Tair Get Failed.");
+        return null;
     }
+
 
     /**
      * Put result.
@@ -48,16 +58,23 @@ public class MyTairClient extends DefaultTairClient {
      * @param ns    the ns
      * @param key   the key
      * @param value the value
-     * @param opt   the opt
      * @return the result
      * @throws TairRpcError         the tair rpc error
      * @throws TairFlowLimit        the tair flow limit
      * @throws TairTimeout          the tair timeout
      * @throws InterruptedException the interrupted exception
      */
-    public Result<Void> put(short ns, String key,Object value, TairOption opt)
+    public boolean put(String key,Object value)
             throws TairRpcError, TairFlowLimit, TairTimeout, InterruptedException {
-        return this.put(ns,ByteUtil.getBytes(key),SerializationUtil.serialize(value),opt);
+
+        Result<Void> result =this.put(NaneSpace,ByteUtil.getBytes(key),SerializationUtil.serialize(value),Opt);
+
+        if (result.isSuccess() && result.getCode().errno()==0) {
+            return true;
+        }
+        // request fail;
+        Logger.error("Tair Put Failed.");
+        return false;
     }
 
 }

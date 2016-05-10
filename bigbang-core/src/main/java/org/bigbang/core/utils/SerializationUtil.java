@@ -24,7 +24,7 @@ public class SerializationUtil{
 
 	private static Objenesis objenesis = new ObjenesisStd(true);
 	
-	private static <T> Schema<T> getSchema(Class<T> cls) {
+	private static  <T> Schema<T> getSchema(Class<T> cls) {
 		Schema<T> schema = (Schema<T>) cachedSchema.get(cls);
 		if (schema == null) {
 			schema = RuntimeSchema.createFrom(cls);

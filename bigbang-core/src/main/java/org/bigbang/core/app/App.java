@@ -36,14 +36,14 @@ public class App {
         tair.init();
 
         try {
-            tair.put(ns,"test", new Man("BBBBBB"),opt);
+            tair.put("test", new Man("GGGGGG"));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         Man g = null;
         try {
-              g = tair.get(Man.class,ns, "test");
+              g = tair.get(Man.class, "test");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
