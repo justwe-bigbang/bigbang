@@ -25,9 +25,7 @@ public class App {
         String master = "173.26.122.19:5198"; // tair master cs address, for example, 10.232.4.14:5008;
         String slave = null; // tair slave cs address
         String group = "group_1"; // tair group name
-        short ns = 120; //namespace
-        //超时时间
-        TairClient.TairOption opt = new TairClient.TairOption(500);
+
 
         MyTairClient tair = new MyTairClient();
         tair.setMaster(master);
@@ -35,11 +33,11 @@ public class App {
         tair.setGroup(group);
         tair.init();
 
-        try {
+        /*try {
             tair.put("test", new Man("GGGGGG"));
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
 
         Man g = null;
         try {
