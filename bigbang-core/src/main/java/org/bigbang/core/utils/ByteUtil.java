@@ -199,39 +199,6 @@ public class ByteUtil{
     }
 
 
-    public static <T> T get(Class<T> t, byte[] bytes) {
-        Object obj = null;
-        try {
-            ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-            ObjectInputStream ois = new ObjectInputStream(bis);
-            obj = ois.readObject();
-            ois.close();
-            bis.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
-        return (T) obj;
-    }
-
-    public static byte[] getBytes(Serializable obj) {
-        byte[] bytes = null;
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(obj);
-            oos.flush();
-            bytes = bos.toByteArray();
-            oos.close();
-            bos.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return bytes;
-    }
-
-
     /**
      * The entry point of application.
      *
@@ -246,9 +213,6 @@ public class ByteUtil{
 
         float f = 122.22f;
         double d = 122.22;
-
-        Man man = new Man("helloworld");
-
 
         String string = "helloworld";
         System.out.println(s);
@@ -268,31 +232,5 @@ public class ByteUtil{
         System.out.println(getFloat(getBytes(f)));
         System.out.println(getDouble(getBytes(d)));
         System.out.println(getString(getBytes(string)));
-
-        System.out.println(get(Man.class,getBytes(man)));
-    }
-
-    public static class Man implements Serializable{
-        private String name;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-
-        public Man(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return "Man{" +
-                    "name='" + name + '\'' +
-                    '}';
-        }
     }
 }

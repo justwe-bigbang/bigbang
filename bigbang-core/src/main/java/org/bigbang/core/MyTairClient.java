@@ -1,50 +1,47 @@
 package org.bigbang.core;
 
-
-import com.taobao.tair3.client.Result;
-import com.taobao.tair3.client.error.TairFlowLimit;
-import com.taobao.tair3.client.error.TairRpcError;
-import com.taobao.tair3.client.error.TairTimeout;
-import com.taobao.tair3.client.impl.DefaultTairClient;
+import com.taobao.tair.DataEntry;
+import com.taobao.tair.Result;
+import com.taobao.tair.ResultCode;
+import com.taobao.tair.impl.DefaultTairManager;
 import org.bigbang.core.utils.ByteUtil;
-import org.bigbang.core.utils.SerializationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * @Title MyTairClient.java
- * @Description TODO(用一句话描述该文件做什么)
- * @Author yzh yingzh@getui.com
- * @Date 05.09.2016
- */
-public class MyTairClient extends DefaultTairClient {
+
+public class MyTairClient extends DefaultTairManager {
 
     //命名空间
-    private final static short NaneSpace=0;
-    //默认参数
-    private final static TairOption Opt=new TairOption(3000); //3s 超时
+    private final static short NaneSpace = 0;
+    //超时参数
+     private final static int timeout = 3000; //3s 超时
 
-    private final static Logger Logger= LoggerFactory.getLogger(MyTairClient.class);
+    private final static Logger Logger = LoggerFactory.getLogger(MyTairClient.class);
 
-    /**
-     * Get t.
-     *
-     * @param <T> the type parameter
-     * @param t   the t
-     * @param key the key
-     * @return the t
-     * @throws TairRpcError         the tair rpc error
-     * @throws TairFlowLimit        the tair flow limit
-     * @throws TairTimeout          the tair timeout
-     * @throws InterruptedException the interrupted exception
-     */
-    public <T> T get(Class<T> t,String key) throws TairRpcError, TairFlowLimit, TairTimeout, InterruptedException {
 
-        Result<byte[]> result= this.get(NaneSpace, ByteUtil.getBytes(key),Opt);
+    public boolean put(String key, Serializable value) {
 
-        if (result.isSuccess() && result.getCode().errno()==0) {
-          return  SerializationUtil.deserialize(result.getResult(),t);
+        ResultCode result = this.put(NaneSpace, ByteUtil.getBytes(key), value);
+
+        if (result.isSuccess() && result.getCode() == 0) {
+            return true;
+        }
+        // request fail;
+        Logger.error("Tair Put Failed.");
+        return false;
+    }
+
+
+    public Object get(String key) {
+
+        Result<DataEntry> result = this.get(NaneSpace, ByteUtil.getBytes(key));
+
+        if (null !=result&&result.isSuccess() && result.getRc().getCode() == 0) {
+            return result.getValue().getValue();
         }
         // request fail;
         Logger.error("Tair Get Failed.");
@@ -52,29 +49,34 @@ public class MyTairClient extends DefaultTairClient {
     }
 
 
-    /**
-     * Put result.
-     *
-     * @param ns    the ns
-     * @param key   the key
-     * @param value the value
-     * @return the result
-     * @throws TairRpcError         the tair rpc error
-     * @throws TairFlowLimit        the tair flow limit
-     * @throws TairTimeout          the tair timeout
-     * @throws InterruptedException the interrupted exception
-     */
-    public boolean put(String key,Object value)
-            throws TairRpcError, TairFlowLimit, TairTimeout, InterruptedException {
+    //
+    private static MyTairClient instance;
 
-        Result<Void> result =this.put(NaneSpace,ByteUtil.getBytes(key),SerializationUtil.serialize(value),Opt);
+    //SingleInstance
+    public static MyTairClient getInstance() {
 
-        if (result.isSuccess() && result.getCode().errno()==0) {
-            return true;
+        if (null == instance) {
+            synchronized (MyTairClient.class) {
+                if (null == instance) {
+                    instance = new MyTairClient();
+
+                    String master = "173.26.122.19:5198"; //tair master cs address, for example, 10.232.4.14:5008;
+                    String slave = null; // tair slave cs address
+                    String group = "group_1"; // tair group name
+
+                    List<String> config = new ArrayList<>();
+                    config.add(master);
+
+                    instance.setConfigServerList(config);
+                    instance.setGroupName(group);
+                    instance.setTimeout(timeout);
+                    instance.init();
+
+                    return instance;
+                }
+            }
         }
-        // request fail;
-        Logger.error("Tair Put Failed.");
-        return false;
+        return instance;
     }
 
 }
