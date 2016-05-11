@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class MyTairClient extends DefaultTairManager {
 
     //命名空间
-    private final static short NaneSpace = (short)(Config.NameSpace);
+    private final static short NaneSpace = (short) (Config.NameSpace);
 
     private final static Logger Logger = LoggerFactory.getLogger(MyTairClient.class);
 
@@ -24,7 +24,7 @@ public class MyTairClient extends DefaultTairManager {
 
         ResultCode result = this.put(NaneSpace, ByteUtil.getBytes(key), value);
 
-        if (null !=result&&result.isSuccess() && result.getCode() == 0) {
+        if (result.isSuccess() && result.getCode() == 0) {
             return true;
         }
         // request fail;
@@ -37,7 +37,10 @@ public class MyTairClient extends DefaultTairManager {
 
         Result<DataEntry> result = this.get(NaneSpace, ByteUtil.getBytes(key));
 
-        if (null !=result&&result.isSuccess() && result.getRc().getCode() == 0) {
+        if (result == null)
+            return null;
+
+        if (result.isSuccess() && result.getRc().getCode() == 0) {
             return result.getValue().getValue();
         }
         // request fail;
