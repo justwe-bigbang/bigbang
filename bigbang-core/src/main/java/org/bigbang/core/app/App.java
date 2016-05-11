@@ -18,7 +18,7 @@ public class App {
 
         MyTairClient tair = MyTairClient.getInstance();
 
-        /*tair.put("test",new Man("rrrrrrr"));*/
+        tair.put("test",new Man("rrrrrrr"));
 
         for (int i = 0; i < 10; i++) {
 

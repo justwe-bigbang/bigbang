@@ -4,21 +4,18 @@ import com.taobao.tair.DataEntry;
 import com.taobao.tair.Result;
 import com.taobao.tair.ResultCode;
 import com.taobao.tair.impl.DefaultTairManager;
+import org.bigbang.core.imp.Config;
 import org.bigbang.core.utils.ByteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MyTairClient extends DefaultTairManager {
 
     //命名空间
-    private final static short NaneSpace = 0;
-    //超时参数
-     private final static int timeout = 3000; //3s 超时
+    private final static short NaneSpace = (short)(Config.NameSpace);
 
     private final static Logger Logger = LoggerFactory.getLogger(MyTairClient.class);
 
@@ -27,7 +24,7 @@ public class MyTairClient extends DefaultTairManager {
 
         ResultCode result = this.put(NaneSpace, ByteUtil.getBytes(key), value);
 
-        if (result.isSuccess() && result.getCode() == 0) {
+        if (null !=result&&result.isSuccess() && result.getCode() == 0) {
             return true;
         }
         // request fail;
@@ -58,18 +55,11 @@ public class MyTairClient extends DefaultTairManager {
         if (null == instance) {
             synchronized (MyTairClient.class) {
                 if (null == instance) {
+
                     instance = new MyTairClient();
-
-                    String master = "173.26.122.19:5198"; //tair master cs address, for example, 10.232.4.14:5008;
-                    String slave = null; // tair slave cs address
-                    String group = "group_1"; // tair group name
-
-                    List<String> config = new ArrayList<>();
-                    config.add(master);
-
-                    instance.setConfigServerList(config);
-                    instance.setGroupName(group);
-                    instance.setTimeout(timeout);
+                    instance.setConfigServerList(Config.ConfigServerList);
+                    instance.setGroupName(Config.Group);
+                    instance.setTimeout(Config.TimeOut);
                     instance.init();
 
                     return instance;

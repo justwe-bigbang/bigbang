@@ -70,7 +70,7 @@ public class BaseConfig implements IConfig {
     }
 
     private File getConfigFile() {
-        return new File(getConfigDir() + File.separator + "rd.properties");
+        return new File(getConfigDir() + File.separator + "cf.properties");
     }
 
 
