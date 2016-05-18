@@ -16,7 +16,7 @@ public class SimpleBolt extends BaseBasicBolt {
         try {
             String msg = input.getString(0);
             if (msg != null){
-                //System.out.println("msg="+msg);
+                System.out.println("msg="+msg);
                 collector.emit(new Values(msg + "msg is processed!"));
             }
 
