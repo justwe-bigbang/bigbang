@@ -1,3 +1,4 @@
+/*
 package bigbang.tair;
 
 import com.taobao.tair3.client.TairClient;
@@ -10,9 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+*/
 /**
  * Created by bysocket on 16/5/5.
- */
+ *//*
+
 public class TestBase {
 
 
@@ -21,7 +24,9 @@ public class TestBase {
     protected String group = "group_1"; // tair group name
     protected DefaultTairClient tair = null;
     protected short ns = 120; //namespace
-    protected TairClient.TairOption opt = new TairClient.TairOption(500/*timeout*/);
+    protected TairClient.TairOption opt = new TairClient.TairOption(500*/
+/*timeout*//*
+);
 
     @Before
     public void setUp() throws Exception {
@@ -38,3 +43,4 @@ public class TestBase {
     }
 
 }
+*/

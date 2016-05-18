@@ -1,3 +1,4 @@
+/*
 package bigbang.tair;
 
 import java.util.UUID;
@@ -14,9 +15,11 @@ import com.taobao.tair3.client.util.ByteArray;
 
 import static org.junit.Assert.assertEquals;
 
+*/
 /**
  * Created by bysocket on 16/5/5.
- */
+ *//*
+
 public class PutGetTest extends TestBase {
     public TairOption opt = new TairOption(50000000, (short) 0, 0);
 
@@ -55,3 +58,4 @@ public class PutGetTest extends TestBase {
         }
     }
 }
+*/
