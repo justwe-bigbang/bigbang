@@ -20,13 +20,12 @@ public class App {
 
         /*tair.put("test",new Man("rrrrrrr"));*/
 
-        for (int i = 0; i < 10; i++) {
-
+        for (int i = 0; i < 1000; i++) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     Object g = tair.get("test");
-                    logger.debug(g.toString());
+                    logger.info(g.toString());
                 }
             }).start();
         }
