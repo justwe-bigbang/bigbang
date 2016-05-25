@@ -12,6 +12,7 @@
     <modules>
         <module>bigbang-deploy</module>
         <module>bigbang-core</module>
+        <module>bigbang-race</module>
     </modules>
 
     <properties>
