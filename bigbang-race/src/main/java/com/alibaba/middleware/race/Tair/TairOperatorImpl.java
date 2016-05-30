@@ -1,12 +1,12 @@
-package com.alibaba.middleware.race.Tair;
+package com.alibaba.middleware.race.tair;
 
 import com.alibaba.middleware.race.RaceConfig;
 import java.io.Serializable;
 
 
 /**
- * ¶ÁĞ´tairËùĞèÒªµÄ¼¯ÈºĞÅÏ¢£¬ÈçmasterConfigServer/slaveConfigServerµØÖ·/
- * group ¡¢namespaceÎÒÃÇ¶¼»áÔÚÕıÊ½Ìá½»´úÂëÇ°¸æÖªÑ¡ÊÖ
+ * è¯»å†™tairæ‰€éœ€è¦çš„é›†ç¾¤ä¿¡æ¯ï¼Œå¦‚masterConfigServer/slaveConfigServeråœ°å€/
+ * group ã€namespaceæˆ‘ä»¬éƒ½ä¼šåœ¨æ­£å¼æäº¤ä»£ç å‰å‘ŠçŸ¥é€‰æ‰‹
  */
 public class TairOperatorImpl {
 
@@ -31,17 +31,17 @@ public class TairOperatorImpl {
     public void close(){
     }
 
-    //ÌìÃ¨µÄ·ÖÖÓ½»Ò×¶îĞ´Èëtair
+    //å¤©çŒ«çš„åˆ†é’Ÿäº¤æ˜“é¢å†™å…¥tair
     public static void main(String [] args) throws Exception {
         TairOperatorImpl tairOperator = new TairOperatorImpl(RaceConfig.TairConfigServer, RaceConfig.TairSalveConfigServer,
                 RaceConfig.TairGroup, RaceConfig.TairNamespace);
-        //¼ÙÉèÕâÊÇ¸¶¿îÊ±¼ä
+        //å‡è®¾è¿™æ˜¯ä»˜æ¬¾æ—¶é—´
         Long millisTime = System.currentTimeMillis();
-        //ÓÉÓÚÕû·ÖÊ±¼ä´ÁÊÇ10Î»Êı£¬ËùÒÔĞèÒª×ª»»³ÉÕû·ÖÊ±¼ä´Á
+        //ç”±äºæ•´åˆ†æ—¶é—´æˆ³æ˜¯10ä½æ•°ï¼Œæ‰€ä»¥éœ€è¦è½¬æ¢æˆæ•´åˆ†æ—¶é—´æˆ³
         Long minuteTime = (millisTime / 1000 / 60) * 60;
-        //¼ÙÉèÕâÒ»·ÖÖÓµÄ½»Ò×¶îÊÇ100;
+        //å‡è®¾è¿™ä¸€åˆ†é’Ÿçš„äº¤æ˜“é¢æ˜¯100;
         Double money = 100.0;
-        //Ğ´Èëtair
+        //å†™å…¥tair
         tairOperator.write(RaceConfig.prex_tmall + minuteTime, money);
     }
 }

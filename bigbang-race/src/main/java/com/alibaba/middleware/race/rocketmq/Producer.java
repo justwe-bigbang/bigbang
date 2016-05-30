@@ -16,7 +16,7 @@ import java.util.concurrent.Semaphore;
 
 
 /**
- * Producer��������Ϣ
+ * Producer，发送消息
  */
 public class Producer {
 
@@ -24,17 +24,17 @@ public class Producer {
     private static int count = 1000;
 
     /**
-     * ����һ��ģ��ѻ���Ϣ�ĳ������ɵ���Ϣģ�ͺ����Ǳ�������Ϣģ����һ���ģ�
-     * ����ѡ�ֿ���������������������ݣ������µĲ��ԡ�
+     * 这是一个模拟堆积消息的程序，生成的消息模型和我们比赛的消息模型是一样的，
+     * 所以选手可以利用这个程序生成数据，做线下的测试。
      * @param args
      * @throws MQClientException
      * @throws InterruptedException
      */
     public static void main(String[] args) throws MQClientException, InterruptedException {
-        DefaultMQProducer producer = new DefaultMQProducer("please_rename_unique_group_name");
 
-        //�ڱ��ش��broker��,�ǵ�ָ��nameServer�ĵ�ַ
-        //producer.setNamesrvAddr("127.0.0.1:9876");
+        DefaultMQProducer producer = new DefaultMQProducer(RaceConfig.RocketMQ.ProducerGroup);
+
+        producer.setNamesrvAddr(RaceConfig.RocketMQ.NamesrvAddr);
 
         producer.start();
 
@@ -99,7 +99,7 @@ public class Producer {
 
         semaphore.acquire(count);
 
-        //��һ��short��ʶ������ֹͣ��������
+        //用一个short标识生产者停止生产数据
         byte [] zero = new  byte[]{0,0};
         Message endMsgTB = new Message(RaceConfig.MqTaobaoTradeTopic, zero);
         Message endMsgTM = new Message(RaceConfig.MqTmallTradeTopic, zero);

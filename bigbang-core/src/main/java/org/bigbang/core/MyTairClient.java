@@ -28,7 +28,7 @@ public class MyTairClient extends DefaultTairManager {
             return true;
         }
         // request fail;
-        Logger.error("Tair Put Failed.");
+        Logger.error("tair Put Failed.");
         return false;
     }
 
@@ -44,7 +44,7 @@ public class MyTairClient extends DefaultTairManager {
             return result.getValue().getValue();
         }
         // request fail;
-        Logger.error("Tair Get Failed.");
+        Logger.error("tair Get Failed.");
         return null;
     }
 

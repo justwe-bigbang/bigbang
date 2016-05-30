@@ -15,11 +15,11 @@ import java.util.List;
 
 
 /**
- * Consumer��������Ϣ
+ * Consumer，订阅消息
  */
 
 /**
- * RocketMq��������Ϣ���Ƕ�������ʽ�ύ����ǰ��֪ѡ��
+ * RocketMq消费组信息我们都会再正式提交代码前告知选手
  */
 public class Consumer {
 
@@ -27,13 +27,12 @@ public class Consumer {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("please_rename_unique_group_name_4");
 
         /**
-         * ����Consumer��һ�������ǴӶ���ͷ����ʼ���ѻ��Ƕ���β����ʼ����<br>
-         * ����ǵ�һ����������ô�����ϴ����ѵ�λ�ü�������
+         * 设置Consumer第一次启动是从队列头部开始消费还是队列尾部开始消费<br>
+         * 如果非第一次启动，那么按照上次消费的位置继续消费
          */
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 
-        //�ڱ��ش��broker��,�ǵ�ָ��nameServer�ĵ�ַ
-        //consumer.setNamesrvAddr("127.0.0.1:9876");
+        consumer.setNamesrvAddr(RaceConfig.RocketMQ.NamesrvAddr);
 
         consumer.subscribe(RaceConfig.MqPayTopic, "*");
 
@@ -46,7 +45,7 @@ public class Consumer {
 
                     byte [] body = msg.getBody();
                     if (body.length == 2 && body[0] == 0 && body[1] == 0) {
-                        //Info: ������ֹͣ��������, ������ζ�����Ͻ���
+                        //Info: 生产者停止生成数据, 并不意味着马上结束
                         System.out.println("Got the end signal");
                         continue;
                     }

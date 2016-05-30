@@ -10,6 +10,17 @@ import com.alibaba.middleware.race.RaceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 这是一个很简单的例子
+ * 选手的拓扑提交到集群，我们是有超时设置的。每个选手的拓扑最多跑20分钟，一旦超过这个时间
+ * 我们会将选手拓扑杀掉。
+ */
+
+/**
+ * 选手拓扑入口类，我们定义必须是com.alibaba.middleware.race.jstorm.RaceTopology
+ * 因为我们后台对选手的git进行下载打包，拓扑运行的入口类默认是com.alibaba.middleware.race.jstorm.RaceTopology；
+ * 所以这个主类路径一定要正确
+ */
 public class RaceTopology {
 
     private static Logger LOG = LoggerFactory.getLogger(RaceTopology.class);
@@ -29,7 +40,7 @@ public class RaceTopology {
         builder.setBolt("count", new WordCount(), count_Parallelism_hint).fieldsGrouping("split", new Fields("word"));
         String topologyName = RaceConfig.JstormTopologyName;
 
-        //�ֲ�ʽģʽ
+        //分布式集群方式
         /*try {
             StormSubmitter.submitTopology(topologyName, conf, builder.createTopology());
         } catch (Exception e) {
@@ -38,13 +49,13 @@ public class RaceTopology {
         }*/
 
 
-        //�������⼯Ⱥ����
+        //单机伪集群
         LocalCluster cluster = new LocalCluster();
-        //�ύ���� ����������
+        //添加拓扑
         cluster.submitTopology(topologyName, conf, builder.createTopology());
-        //����ʮ��
-        Utils.sleep(10000);
-        //ɱ������
+        //sleep 20min
+        Utils.sleep(1200000);
+        //杀死进程
         cluster.killTopology(topologyName);
 
 

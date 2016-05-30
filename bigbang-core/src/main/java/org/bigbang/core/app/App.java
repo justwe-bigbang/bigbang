@@ -18,9 +18,9 @@ public class App {
 
         MyTairClient tair = MyTairClient.getInstance();
 
-        /*tair.put("test",new Man("rrrrrrr"));*/
+        tair.put("test",new Man("rrrrrrr"));
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 2; i++) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
